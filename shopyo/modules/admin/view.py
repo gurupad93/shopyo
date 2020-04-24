@@ -9,6 +9,8 @@ import json
 from flask import Blueprint, render_template, request, redirect
 
 from flask_login import login_required
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField
 from shopyoapi.init import db
 
 from shopyoapi.enhance import base_context
@@ -28,6 +30,13 @@ admin_blueprint = Blueprint(
     template_folder="templates",
     url_prefix=module_info["url_prefix"],
 )
+
+
+class AdminForm(FlaskForm):
+    id = StringField('id')
+    name = StringField('name')
+    password = PasswordField('password')
+    admin_user = BooleanField('admin_user')
 
 
 @admin_blueprint.route("/")
