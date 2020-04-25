@@ -65,16 +65,12 @@ def user_add():
 
     """
     context = base_context()
-    if request.method == "POST":
-        id = request.form["id"]
-        name = request.form["name"]
-        password = request.form["password"]
-        admin_user = request.form.get("admin_user")
-        if admin_user == "True":
-            admin_user = True
-        else:
-            admin_user = False
-
+    admin_form = AdminForm()
+    if admin_form.validate_on_submit():
+        id = admin_form.id.data
+        name = admin_form.name.data
+        password = admin_form.password.data
+        admin_user = admin_form.admin_user.data
         has_user = db.session.query(exists().where(Users.id == id)).scalar()
 
         if has_user is False:
@@ -130,14 +126,11 @@ def admin_update():
                    **Update a User record**
 
     """
-    id = request.form["id"]
-    name = request.form["name"]
-    password = request.form["password"]
-    admin_user = request.form.get("admin_user")
-    if admin_user == "True":
-        admin_user = True
-    else:
-        admin_user = False
+    admin_form = AdminForm()
+    id = admin_form.id.data
+    name = admin_form.name.data
+    password = admin_form.password.data
+    admin_user = admin_form.admin_user.data
     u = Users.query.get(id)
     u.name = name
     u.set_hash(password)
